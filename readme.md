@@ -17,3 +17,14 @@
 - [fs](https://nodejs.org/dist/latest-v16.x/docs/api/fs.html): Enables interacting with the file system in a way modeled on standard POSIX functions.
 
 - [http](https://nodejs.org/dist/latest-v16.x/docs/api/http.html): HTTP interface API.
+
+
+## NPM
+npm is the world's largest Software Registry.The registry contains over 800,000 code packages.Open-source developers use npm to share software.Many organizations also use npm to manage private development.
+
+- **Commands**
+   - `npm --version`
+   - local dependency, `npm i {packageName}`
+   - global dependency, `npm install -g {packageName}`, `sudo npm install -g {packageName}`
+   - package.json, `npm init`, `npm init -y`
+
