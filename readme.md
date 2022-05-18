@@ -27,4 +27,8 @@ npm is the world's largest Software Registry.The registry contains over 800,000 
    - local dependency, `npm i {packageName}`
    - global dependency, `npm install -g {packageName}`, `sudo npm install -g {packageName}`
    - package.json, `npm init`, `npm init -y`
+   - dev dependency, `npm install {packageName} -D(or --save-dev)`
+   - uninstall, `npm uninstall {packageName}`
+   - install from package.json, `npm install`
 
+[The basics of package.json](https://nodesource.com/blog/the-basics-of-package-json) 
