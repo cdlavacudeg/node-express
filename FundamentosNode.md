@@ -52,6 +52,220 @@ Imprime `Hola Carlos tu web es Sin web`
 
 - **PM2** Parecido a nodemon pero para producción `npm install -g pm2`
 
+---
+# Cómo manejar la asincronía
+
+## Callbacks 
+
+Una funcion **callback** es una funcion que es pasada como argumento a otra funcion, para ser llamada(called back) en otro momento.
+
+La funcion que recibe como argumento otras funciones es denominada funcion de orden superior (higher-order function), esta contiene la logica correspondiente para ejecutar adecuadamente la funcion callback.
+
+```javascript
+//La asincronia se puede generar mediante en setTimeout
+
+console.log('Iniciando proceso...');
+
+function soyAsincrono(elCallback) {
+    console.log("Asigno setTimeout para volver asincrona una función como esta misma: \n " + soyAsincrono);
+    setTimeout(function(){
+    console.log("Pasaron 3 segundos y me ejecuté");
+    elCallback();
+    }, 3000)
+};
+
+soyAsincrono(function(){console.log("Después de esto demuestro que Soy el primer Callback")});
+
+
+function hola(nombre, miCallback) {
+    setTimeout(function () {
+        console.log('Hola, '+ nombre);
+        miCallback(nombre);
+    }, 1500);
+}
+
+function adios(nombre, otroCallback) {
+    setTimeout(function() {console.log('Adios', nombre); otroCallback();}, 5000);
+}
+
+
+hola('Alejandro', function (nombre) {
+    adios(nombre, function() {
+        console.log('Terminando proceso...');
+    });
+});
+
+hola('Alejandro estás probando  "hola" las funciones independientemente, las pasas vacías', function () {});
+adios('Alejandro estás probando "adios" las funciones independientemente, las pasas vacías', function () {});
+
+```
+
+## Callback Hell: refractorizar o sufrir
+
+Los callback Hell se dan cuando se pasa una función como parámetro que a su vez llama a otra función como parámetro, y así hasta n.
+Una estrategia para trabajar con estas estructuras lógicas tan monolíticas es usar estructuras de control y funciones recursivas.
+
+Las funciones recursivas se llaman así mismas y mediante la estructura de control le digo cuantas veces voy a necesitar llamar la función así misma.
+
+
+```javascript
+//callbackhell.js
+
+function hola(nombre, miCallback) {
+    setTimeout(function () {
+        console.log('Hola, '+ nombre);
+        miCallback(nombre);
+    }, 1500);
+}
+
+function hablar(callbackHablar) {
+    setTimeout(function() {
+        console.log('Bla bla bla bla...');
+        callbackHablar();
+    }, 1000);
+}
+
+function adios(nombre, otroCallback) {
+    setTimeout(function() {
+        console.log('Adios', nombre);
+        otroCallback();
+    }, 1000);
+}
+
+//En esta parte del código se usan funciones recursivas y mediante un If como estructura de control le digo que cantidad de veces va a  ejectuarse la funcion hablar.
+
+function conversacion(nombre, veces, callback) {
+    if (veces > 0) {
+        hablar(function () {
+          conversacion(nombre, --veces, callback);
+        })
+    } else {
+        adios(nombre, callback);
+    }
+}
+
+// --
+
+console.log('Iniciando proceso...');
+hola('Aleajandro-sin', function (nombre) {
+    conversacion(nombre, 10, function() {
+        console.log('Proceso terminado');
+    });
+});
+
+/****************HELL**********************/
+// hola('Alejandro', function (nombre) {
+//     hablar(function () {
+//         hablar(function () {
+//             hablar(function () {
+//                 adios(nombre, function() {
+//                     console.log('Terminando proceso...');
+//                 });
+//             });
+//         });
+//     });
+// });
+
+```
+## Promesas
+
+```javascript
+
+function hola(nombre) {
+    return new Promise(function(resolve,reject){
+        setTimeout(function () {
+            console.log('Hola, '+ nombre);
+            resolve(nombre);
+            }, 1500);
+    });
+}
+
+function hablar(nombre) {
+    return new Promise ((resolve,reject)=>{
+      setTimeout(function() {
+        console.log('Bla bla bla bla...');
+        resolve();
+        //reject(); -> generar un error para probar catch
+      }, 1000);
+    })
+}
+
+function adios(nombre) {
+    return new Promise((resolve,reject)=>{
+        setTimeout(function() {
+            console.log('Adios', nombre);
+            resolve();
+            }, 1000);
+      });
+}
+
+// ---
+
+console.log('Iniciando el proceso..');
+
+hola('Cristian')
+  .then(hablar)
+  .then(hablar)
+  .then(hablar)
+  .then(hablar)
+  .then(hablar)
+  .then(hablar)
+  .then(adios)
+  .then((nombre) => {
+    console.log('Terminado el proceso');
+  })
+  .catch(error=>{
+    console.error('Se generó un error');
+    console.error(error)
+  })
+```
+
+## Async/ await
+
+```javascript
+async function hola(nombre) {
+    return new Promise(function(resolve,reject){
+        setTimeout(function () {
+            console.log('Hola, '+ nombre);
+            resolve(nombre);
+            }, 1500);
+    });
+}
+
+async function hablar(nombre) {
+    return new Promise ((resolve,reject)=>{
+      setTimeout(function() {
+        console.log('Bla bla bla bla...');
+        resolve();
+        //reject(); -> generar un error para probar catch
+      }, 1000);
+    })
+}
+
+async function adios(nombre) {
+    return new Promise((resolve,reject)=>{
+        setTimeout(function() {
+            console.log('Adios', nombre);
+            resolve();
+            }, 1000);
+      });
+}
+
+// ---
+async function main(){
+  let nombre = await hola('Cristian');
+  await hablar();
+  await hablar();
+  await hablar();
+  await hablar();
+  await adios(nombre);
+}
+
+console.log('Empezamos e proceso');
+main();
+console.log('Termina el proceso');
+
+```
 
 # Links
 
