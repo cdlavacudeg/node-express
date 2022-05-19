@@ -39,4 +39,9 @@ npm is the world's largest Software Registry.The registry contains over 800,000 
 
 [What is the event Loop](https://www.youtube.com/watch?v=8aGhZQkoFbQ)
 
+## Events 
+- Event-Driven programming
+- Used Heavily in Node.js
+
+Listen for specific events to fire a function.
 
