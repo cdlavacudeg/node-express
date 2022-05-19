@@ -32,3 +32,11 @@ npm is the world's largest Software Registry.The registry contains over 800,000 
    - install from package.json, `npm install`
 
 [The basics of package.json](https://nodesource.com/blog/the-basics-of-package-json) 
+
+## Event Loop
+
+[Doc](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/#:~:text=The%20event%20loop%20is%20what,operations%20executing%20in%20the%20background.)
+
+[What is the event Loop](https://www.youtube.com/watch?v=8aGhZQkoFbQ)
+
+
