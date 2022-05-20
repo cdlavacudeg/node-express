@@ -266,6 +266,130 @@ main();
 console.log('Termina el proceso');
 
 ```
+---
+
+# Módulos del core
+
+## Globals
+
+En node tonomas el objeto [**global**](https://nodejs.org/api/globals.html) que contieno las metodos y propiedades básicas que usamos en Node.js; ej (*setTimeOut*)
+
+
+> **global** es un equivalente de **this** en el navegador
+
+En node **this** es un alias de **global**
+
+```javascript
+this === global //true
+console.log(global) //acceder a esta variable
+```
+Algunos metodos que se incluyen en el global objecto son:
+
+- **setTimeOut**:se encarga de llamaraotra función despues de un periodo de tiempo.
+- **setinterval**:llama a otra función cada intervalo de tiempo.
+- **setImmediate**:EquivalenteasetTimeOut pero con tiempo 0.
+- **clearTimeOut**:detiene un setTimeOut.
+- **clearInterval**:detiene un setinterval.
+
+## File system
+
+El file system ([fs](https://nodejs.org/api/fs.html) provee una API para interactuar con el sistema de archivos cerca del estándar POSIX.
+POSIX es el estándar para interfaces de comando y shell, las siglas las significan: “Interfaz de sistema operativo portátil” la X de POSIX es por UNIX.
+
+El file system nos permite acceder archivo del sistema, leer, modificar., escribirlos, es muy útil para precompiladores, para lo que requiera hacer grabados de disco, o bases de datos en node requieren un uso intensivo de Node.Todo lo que hagamos con modulos por buenas prácticas son asincronos, pero tienen una version sincrona no recomendada pues pordría bloquear el event loop con más facilidad.
+
+```javascript
+const fs = require('fs');
+
+function leer(ruta, cb) {
+    fs.readFile(ruta, (err, data) => {
+        cb(data.toString());
+    })
+}
+
+function escribir(ruta, contenido, cb) {
+    fs.writeFile(ruta, contenido, function (err) {
+        if (err) {
+            console.error('No he podido escribirlo', err);
+        } else {
+            console.log('Se ha escrito correctamente');
+        }
+
+    });
+}
+
+function borrar(ruta, cb) {
+    fs.unlink(ruta, cb);
+}
+
+// escribir(__dirname + '/archivo1.txt', 'Soy un archivo nuevo', console.log);
+// leer(__dirname + '/archivo1.txt', console.log)
+borrar(__dirname + '/archivo1.txt', console.log);
+
+```
+
+## Console
+
+Con [console](https://nodejs.org/api/console.html) podemos imprimir todo tipo de valores por nuestra terminal:
+
+- `console.log`: recibe cualquier tipo y lo muestra en el consola.
+- `console.info`: es equivalente a log pero es usado para informar.
+- `console.error`: es equivalente a log pero es usado para errores.
+- `console.warn`: es equivalente a log pero es usado para warning.
+- `console.table`: muestra una tabla a partir de un objeto.
+- `console.count`: inicia un contador autoincremental.
+- `console.countReset`: reinicia el contador a 0.
+- `console.time`: inicia un cronometro en ms.
+- `console.timeEnd`: Finaliza el cronometro.
+- `console.group`: permite agrupar errores mediante identación.
+- `console.groupEnd`: finaliza la agrupación.
+- `console.clear`: Limpia la consola.
+
+## Errores (try/ catch)
+
+Con Node podemos manejar los errores de una manera muy optima, pero primero debemos entender como Node maneja los errores por defecto.
+
+Cuando sucede un error en Node, él por defecto terminara todo el proceso de nuestro código para avisar que ha ocurrido un error, 
+esto puede ser fatal para nuestros proyectos, los errores además se notifican por hilos, es decir, que si un error 
+sucede en el hilo principal del event loop, es decir, el evento queue, el error se avisara desde este mismo hilo, 
+pero si un error sucede antes desde otro hilo como el hilo de las funciones asíncronas, el error se avisara desde 
+aquel hilo sin dejar mostrar el error del hilo principal.
+
+Nosotros podemos manejar este flujo de errores para que Node no se detenga al momento de que ocurra uno y 
+lo podamos manejar según nuestros deseos, para esto usamos try y catch. 
+Siendo try el bloque de código que ejecutara la función que puede o no fallar y siendo catch la función que atrapara el error y le especificaremos que hacer con él.
+
+```javascript
+try {
+  itsBroken();
+} catch (error) {
+  console.log(error.message);
+}
+
+//--
+
+try {
+  throw'myException'; // generates an exception
+}
+catch (err) {
+  // statements to handle any exceptions
+  logMyErrors(err);    // pass exception object to error handler
+}
+finally{
+	cerrarArchivo() 
+}
+```
+
+## Procesos hijo
+
+El módulo de procesos secundarios de Node.js ([child\_process](https://nodejs.org/api/child_process.html)) tiene dos funciones spawn y exec, mediante las cuales podemos iniciar un proceso secundario para ejecutar otros programas en el sistema.
+
+La diferencia más significativa entre `child_process.spawn` y `child_process.exec` está en que *spawn* devuelve un stream y *exec* devuelve un buffer.
+
+- Usa spawn cuando quieras que el proceso hijo devuelva datos binarios enormes a Node.
+- Usa exec cuando quieras que el proceso hijo devuelva mensajes de estado simples.
+- Usa spawn cuando quieras recibir datos desde que el proceso arranca.
+- Usa exec cuando solo quieras recibir datos al final de la ejecución.
 
 # Links
 
