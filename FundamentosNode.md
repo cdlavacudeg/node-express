@@ -525,6 +525,140 @@ process.on('uncaughtException',(err,origen)=>{
 random_func()
 ```
 
+---
+# Utilizar los módulos y paquetes externos
+
+## NPM y package.json
+
+npm is the world's largest software registry. Open source developers from every continent use npm to share and borrow packages, and many organizations use npm to manage private development as well.
+
+npm consists of three distinct components:
+
+- the website
+- the Command Line Interface (CLI)
+- the registry
+
+Use the website to discover packages, set up profiles, and manage other aspects of your npm experience. For example, you can set up organizations to manage access to public or private packages.
+
+The CLI runs from a terminal, and is how most developers interact with npm.
+
+The registry is a large public database of JavaScript software and the meta-information surrounding it.
+
+## Construyendo módulos: Require e import
+En Node tenemos una forma de importar módulos la cual es con el método require, el cual es la forma por defecto de importar módulos, ya sean nuestros propios módulos como los de otras personas en nuestros proyectos JS, pero suele haber mucha confusión debido al import.
+
+Import es la forma de importar módulos en Ecmascript, el cual es un estándar de JavaScript para la web, esta forma de importar en teoría Node no la acepta oficialmente, a no ser que usemos su modo de .mjs.
+
+Pero gracias a compiladores como Babel, nosotros podremos utilizar estas normas de Ecmascript en nuestro código para cuando se ejecute se transforme en código que sea aceptable por Node.
+
+Se recomienda en la mayoría de veces la importación con require.
+
+```javascript
+// myOwnModule.js
+function sayHello() {
+    console.log('Hello from inside a function of myOwnModule.js');
+}
+
+const property1 = 'Property 1 String value';
+const property2 = 2;
+
+module.exports = {sayHello, property1, property2}
+};
+```
+
+```javascript
+// index.js
+const myOwnModule = require('./myOwnModule');
+
+console.log(myOwnModule.property1);
+console.log('Property 2 value (number): ', myOwnModule.property2);
+myOwnModule.sayHello();
+
+```
+En caso de usar ES6 tambien es posible emplear:
+```javascript
+// myOwnES6Module.mjs 
+function sayHello() {
+    console.log('Hello from inside a function of myOwnES6Module.mjs');
+}
+
+const property1 = 'Property 1 String value';
+const property2 = 2;
+
+export default {sayHello,property1,property2};
+
+```
+
+```javascript
+// index.mjs
+import myOwnES6Module from './myOwnES6ModuleES6.mjs';
+
+console.log(myOwnES6Module.property1);
+console.log('Property 2 value (number): ', myOwnES6Module.property2);
+myOwnES6Module.sayHello();
+```
+También se podría utilizar el operador de desestructuración para obtener las funciones y propiedades del módulo importado directamente en variables independientes, por ejemplo utiizando el primer ejemplo:
+
+```javascript
+const { sayHello, property1, property2 } = require('./myOwnModule.js');
+
+```
+## Módulos útiles 
+
+### bcrypt
+La función de cifrado de [bcrypt](https://www.npmjs.com/package/bcrypt) nos permite construir una plataforma de seguridad utilizando contraseñas encriptadas con Salt.
+
+```javascript
+const bcrypt = require("bcrypt");
+const password = "NuncaParesDeAprender2020";
+
+bcrypt.hash(password, 5, function(err, hash){
+	console.log(hash)
+});
+// La consola nos entregaria una contraseña distinta en cada oportunidad.
+
+// Para evaluar si una contraseña concuerda con un hash
+bcrypt.compare(password, hash, function(error, result){
+	console.log(result)
+	console.log(error)
+})
+// Nos va a responder **true** *(en el result)* o **false** *(en el error)* dependiendo si la contraseña puede generar el hash
+```
+
+### Moment.js 
+[Moment](https://www.npmjs.com/package/moment) es una libreria para validación, manipulación y formato de fechas.
+
+```javascript
+const moment = require('moment')
+const ahora = moment();
+
+// Para formatear una fecha
+ahora.format('MM/DD/YYYY HH:MM A'); // 04/11/2020 20:10 PM
+
+// Para validad una fecha
+moment('2020-04-11').isValid(); // Nos dara **true** o **false** dependiendo de si la fecha es valida o no
+
+// Para encontrar cuanto tiempo ha pasado hasta hoy
+moment('2018-04-11').fromNow(); // Hace 2 años
+
+// Para agregar o eliminar años, días o meses
+moment('2020-04-11').add(1, 'years'); // 2021-04-11
+moment('2020-04-11').subtract(1, 'years'); // 2019-04-11
+```
+### Sharp
+[Sharp](https://www.npmjs.com/package/sharp) puede convertir imágenes grandes en imágenes JPEG, PNG más pequeñas y compatibles con la web de diferentes dimensiones.
+
+```javascript
+const sharp = require('sharp')
+
+// La siguiente reducira una imagen de 120x120 o cualquier tamaño a 80x80 y lo guardara en una imagen mas pequeña sin eliminr la original.
+sharp('imagen.png').resize(80, 80).toFile('imagen_80x80.png');:
+```
+
+
+
+---
 # Links
 
 - [Node.js about](https://nodejs.org/en/about/)
+- [NPM](https://www.npmjs.com/)
