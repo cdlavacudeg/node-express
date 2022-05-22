@@ -654,8 +654,47 @@ const sharp = require('sharp')
 // La siguiente reducira una imagen de 120x120 o cualquier tamaño a 80x80 y lo guardara en una imagen mas pequeña sin eliminr la original.
 sharp('imagen.png').resize(80, 80).toFile('imagen_80x80.png');:
 ```
+## Datos almacenados vs en memoria
 
+- La información en memoria esta pensada para ser escrita rapida pero borrada tambien rapida.
+- La información almacenada en disco puede ser almacenada durante mucho mas tiempo pero es mucho mas lento escribir y leer en ellos.
 
+## Bufffer 
+
+Un [Buffer](https://en.wikipedia.org/wiki/Data_buffer) es un espacio de memoria (RAM), en el que se almacenan datos de manera temporal. Es la forma mas cruda en la que se pueden almacenar los datos. (se guarda en **bytes** y no se especifica el tipo de dato). En la consola, los datos se muestran en formato hexadecimal. 
+
+```javascript
+// crear un buffer con 4 espacios
+let buffer = Buffer.alloc(4)
+
+console.log(buffer) // <Buffer 00 00 00 00>
+
+// desde datos en un arreglo
+let buffer2 = Buffer.from([1,2,3])
+console.log(buffer2) // <Buffer 01 02 03>
+
+// Datos de tipo String
+let buffer3 = Buffer.from('Hola')
+console.log(buffer3) // <Buffer 48 6f 6C 61>
+console.log(buffer3.toString()) // Hola 
+
+// Guardar el abecedario en un buffer
+let abc=Buffer.alloc(26)
+console.log(abc) // <Buffer 00 .... 00> 26 espacios
+
+for(let i=0; i<26; i++){
+    abc[i]=i+97
+  }
+console.log(abc)
+console.log(abc.toString())
+```
+## Streams
+
+Los [Stream](https://desarrolloweb.com/articulos/streams-nodejs.html) en general son flujos de información, o chorros de información que usamos en la transmición de datos binarios.
+
+El flujo de información que forma un stream se transmite en pedazos, conocidos habitualmente con su término en inglés "chunk". Los chunk no son más que objetos de la clase Buffer.[Documentación](https://nodejs.org/api/stream.html) 
+
+---
 
 ---
 # Links
