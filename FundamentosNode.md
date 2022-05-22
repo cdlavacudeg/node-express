@@ -695,8 +695,173 @@ Los [Stream](https://desarrolloweb.com/articulos/streams-nodejs.html) en general
 El flujo de información que forma un stream se transmite en pedazos, conocidos habitualmente con su término en inglés "chunk". Los chunk no son más que objetos de la clase Buffer.[Documentación](https://nodejs.org/api/stream.html) 
 
 ---
+# Trucos de Node.js 
+
+## Benchmarking (console time y timeEnd)
+La función **console.time(‘nombre’)** inicia un temporizador que se puede usar para rastrear cuánto tiempo dura una operación. El temporizador sera identificado por el nombre dado a la consola. Ese mismo nombre se utilizara cuando se llame a **console.timeEnd(‘nombre’)** para detener el temporizador y obtener el tiempo demorado durante el proceso.
+
+```javascript
+console.time("Temporizador");
+for (var i = 0; i < 10000; i++) {
+  // Nuestro codigo entre los temporizadores puede ser cualquier cosa.
+}
+console.timeEnd("Temporizador");
+```
+## Debugger
+Node.js viene integrado con un modo de debug para poder conectarnos desde cualquier herramienta de inspección de código a nuestro código de node.js.
+
+Podemos utilizar en la terminal el flag de `--inspect` con nodemon
+
+```bash
+npx nodemon --inspect http.js
+```
+- Chrome `chrome://inspect`
+
+## Error First Callbacks
+
+Los Error First Callbacks se utilizan para pasar primero el error y los datos posteriormente. Entonces, puedes verificar el primer argumento, es decir, el objeto de error para ver si algo salió mal y puedes manejarlo. En caso de que no haya ningún error, puedes utilizar los argumentos posteriores y seguir adelante.
+
+> Esto se usa por la convención de que todo puede fallar
+
+```javascript
+fs.readFile('/text.txt', function(err, data) {
+	if (err) {
+		console.log(err);
+	} else {
+		console.log(data);
+	} 
+});
+```
+
+```javascript
+function asincrona() {
+    setTimeout(function () {
+        try {
+            let a =3+z;
+            callback(null,a);
+
+        } catch (error) {
+            callback(error);
+        }
+    },1000);
+}
+
+asincrona(function (error,dato) {
+
+    if(error){
+        console.error('tenemos un error');
+        console.error(error);
+        return false;
+    }
+
+    console.log('todo ha ido bien',data);
+
+})
+```
+---
+# Herramientas de Node.js
+
+## Scraping
+
+`npm install puppeteer`
+
+```javascript
+// index.js
+const puppeteer = require('puppeteer');
+
+(async () => {
+    console.log('lanzamos navegador');
+    // const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch( { headless: false } );
+
+    const page = await browser.newPage();
+    await page.goto('https://es.wikipedia.org/wiki/Node.js');
+
+    var titulo1 = await page.evaluate(()  => {
+        const h1 = document.querySelector('h1');
+        console.log(h1.innerHTML);
+        return h1.innerHTML;
+    });
+
+    console.log(titulo1);
+    console.log('Cerramos navegador');
+    browser.close();
+    console.log('Navegardor cerrado');
+}) ();
+```
+## Automatización de procesos
+
+[Gulp](https://gulpjs.com/) es una herramienta de construcción en JavaScript construida sobre flujos de nodos . Estos flujos facilitan la conexión de operaciones de archivos a través de canalizaciones . Gulp lee el sistema de archivos y canaliza los datos disponibles de un complemento de un solo propósito a otro a través del .pipe()operador, haciendo una tarea a la vez. Los archivos originales no se ven afectados hasta que se procesan todos los complementos. Se puede configurar para modificar los archivos originales o para crear nuevos. Esto otorga la capacidad de realizar tareas complejas mediante la vinculación de sus numerosos complementos. Los usuarios también pueden escribir sus propios complementos para definir sus propias tareas.
+
+- [Empezando con Gulp](https://semaphoreci.com/community/tutorials/getting-started-with-gulp-js)
+- [Automatiza tu flujo de trabajo con Gulp.js](https://platzi.com/blog/automatizacion-gulp-js/)
+
+```javascript
+const gulp = require("gulp");
+const server = require("gulp-server-livereload");
+
+gulp.task("build", function (cb) {
+  console.log("Construyendo el sitio");
+  setTimeout(cb, 1200);
+});
+
+gulp.task("serve", function (cb) {
+  console.log("Abrí la web");
+  gulp.src("www").pipe(
+    server({
+      livereload: false,
+      open: true,
+    })
+  );
+});
+```
+## Aplicaciones de escritorio
+
+[Electron]() (conocido anteriormente como Atom Shell) es un framework de código abierto creado por Cheng Zhao, y ahora desarrollado por GitHub. Permite el desarrollo de aplicaciones gráficas de escritorio usando componentes del lado del cliente y del servidor originalmente desarrolladas para aplicaciones web: Node.js del lado del servidor y Chromium como interfaz. Electron es el framework gráfico detrás de muchos proyectos de código abierto importantes, incluyendo a Atom de GitHub​ y Microsoft Visual Studio Code. Wikipedia
+Aplicaciones que usan Electron: 💪 Visual Studio Code, Atom, Slack, WhatsApp, Skype, Twich, Signal, Github desktop.
+
+- [Desarrollando aplicaciones de escritorio con electron](https://platzi.com/blog/aplicaciones-escritorio-electron-js/)
+
+```html
+// index.html
+<html>
+    <head>
+        <style>
+            body {
+                background: #333333;
+                color: #ffffff;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Soy una apliccion de escritorio</h1>
+        <button>Super bonton</button>
+    </body>
+    
+</html>
+```
+
+```javascript
+// index.js
+const { app, BrowserWindow } = require('electron');
+
+let ventanaPrincipal;
+
+app.on('ready', crearVentana);
+
+function crearVentana() {
+    ventanaPrincipal = new BrowserWindow({
+        width: 800,
+        height: 600,
+    });
+
+    ventanaPrincipal.loadFile('index.html');
+}
+```
+
 
 ---
+
 # Links
 
 - [Node.js about](https://nodejs.org/en/about/)
