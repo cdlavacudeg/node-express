@@ -66,4 +66,14 @@ Mediante el uso de express -> `app.use('/app', express.static('public))` es posi
 
 Es muy importante tener en cuenta la información que se le va a brindar al usuario ya que el contenido del error puede dar pie a que se explote una vulnerabilidad del sistema.
 
+---
 
+# Arquitectura básica del backend en Node.js 
+
+## Conceptualmente: Rutas, controladores y bases de datos
+
+![Arquitectura](https://static.platzi.com/media/user_upload/diagrama-825e902b-0966-40f0-8231-65b99f7206c1.jpg) 
+
+## Rutas y capa de red: Responsabilidad y límites
+
+Organizamos las rutas de tal manera que el archivo network maneje el Router() y quede más limpio el archivo app.js
