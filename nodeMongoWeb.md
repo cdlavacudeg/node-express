@@ -87,3 +87,49 @@ Los controladores van a ser la base del procesamiento de los datos y la comunica
 
 Se crea un archivo de practica para verificar que todo quede funcionando adecuadamente.
 
+---
+
+# Utilizar bases de datos para definir, moldear, almacenar y recuperar la información de nuestra aplicación
+
+## Tipos de bases de datos
+
+- **Bases de Datos Relacionales**: 
+    
+    No es una base de datos muy flexible, pero tiene a favor su gran soporte y el enorme desarrollo en herramientas para su uso. Si necesitamos cambiar un valor de un campo debemos hacerlo con todos los campos de nuestra BD, en cambio con NoSQL o No Relacional no es así.
+
+    Como su nombre lo indica, utilizan el modelo relacional y siempre es mejor usarlas cuando los datos que vas a utilizar son consistentes y ya tienen una estructura planificada.
+
+    - Las bases de datos relacionales funcionan bien con datos estructurados.
+    - Las organizaciones que tienen muchos datos no estructurados o semiestructurados no deberían considerar una base de datos relacional.
+    
+    **Ejemplos**:
+
+        - MySQL
+        - Microsoft SQL Server
+        - Oracle Database
+        - PostgreSQL
+        - IBM Db2
+
+- **Bases de Datos No Relacionales**: 
+    
+    Son de bases de datos sin una tabla fija como las que sí se encuentran en las bases de datos relacionales, lo que permite una alta escalabilidad en ellas. Además, es abierta y, por lo tanto, flexible a diferentes tipos de datos y no necesita tantos recursos para ejecutarse; de hecho, el hardware necesario no cuesta mucho.
+
+    A diferencia de las bases de datos relacionales, los datos de una base de datos NO-SQL (Not Only SQL) son más flexibles en cuanto a consistencia de datos y se han convertido en una opción que intenta solucionar algunas limitaciones que tiene el modelo relacional. Este tipo de bases de datos es excelente para las organizaciones que buscan almacenar datos no estructurados o semiestructurados.
+
+    Una de las ventajas de las bases de datos NoSQL es que los desarrolladores pueden realizar cambios en la base de datos sobre la marcha, sin que ello afecte a las aplicaciones que la utilizan.
+
+    **Ejemplos**:
+
+        - MongoDB
+        - Redis
+        - Apache Cassandra
+        - Apache CouchDB
+        - CouchBase
+
+## MongoDB: Almacenar leer y actualizar datos datos
+
+Empleamos la libreria [mongoose](https://mongoosejs.com/) para realizar verificación de los datos que van a entra a la base de datos. Tener en cuenta que se puede usar un cluster de MongoDB Atlas para realizar las pruebas necesarias.
+
+- `npm install mongoose`
+
+

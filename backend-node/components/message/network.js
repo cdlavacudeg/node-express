@@ -1,6 +1,6 @@
 import express from 'express'
 import {success,error} from '../../network/response.js'
-import {addMessage,getMessage} from './controller.js'
+import {addMessage,getMessage,updateMessage} from './controller.js'
 const router=express.Router();
 
 router.get('/',function (req,res) {
@@ -26,6 +26,16 @@ router.post('/',(req,res)=>{
         })
         .catch(e=>{
             error(req,res,'Error Inesperado')
+        })
+})
+
+router.patch('/:id',(req,res)=>{
+    updateMessage(req.params.id,req.body.text)
+        .then((data)=>{
+            success(req,res,'Actualizado Correctamente')
+        })
+        .catch(e=>{
+            error(req,res,'Error interno')
         })
 })
 export default router 

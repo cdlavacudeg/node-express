@@ -1,4 +1,4 @@
-import {addMessage as storeAdd,getMessage as storeGet} from './store.js'
+import {addMessage as storeAdd,getMessage as storeGet, updateMessage as storeUpdate} from './store.js'
 
 function addMessage(user,message) {
     console.log(`${user} : ${message}`)
@@ -22,6 +22,18 @@ function addMessage(user,message) {
 function getMessage() {
     return new Promise((resolve,reject)=>{
         resolve(storeGet())
+    })
+}
+
+function updateMessage(id,message){
+    return new Promise(async (resolve,reject)=>{
+        if(!id || !message){
+            reject('Invalid data')
+            return false
+        }
+
+        const result=await storeUpdate(id,message)
+        resolve(result)
     })
 }
 export {addMessage,getMessage}
