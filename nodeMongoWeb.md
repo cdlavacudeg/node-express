@@ -76,4 +76,8 @@ Es muy importante tener en cuenta la información que se le va a brindar al usua
 
 ## Rutas y capa de red: Responsabilidad y límites
 
-Organizamos las rutas de tal manera que el archivo network maneje el Router() y quede más limpio el archivo app.js
+Rutas se manejan desde archivo en carpeta network para mantener más limpia app.js
+
+## Controladores: Definiendo la lógica del negocio
+
+Los controladores van a ser la base del procesamiento de los datos y la comunicación de la api, especificamos como vamos a añadir los datos, actualizarlos o borrarlos
