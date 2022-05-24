@@ -1,16 +1,16 @@
 import express from 'express'
 import {success,error} from '../../network/response.js'
-import {addMessage} from './controller.js'
+import {addMessage,getMessage} from './controller.js'
 const router=express.Router();
 
 router.get('/',function (req,res) {
-    // headers
-    console.log(req.headers)
-    res.header({
-        "custom-header":"Nuestro valor personalizado"
-    })
-
-    success(req,res,"Lista de mensajes")
+    getMessage()
+        .then((message)=>{
+            success(req,res,message)
+        })
+        .catch(e=>{
+            error(req,res,'Error Inesperado')
+        })
 })
 
 router.delete('/',function (req,res) {

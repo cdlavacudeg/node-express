@@ -1,4 +1,4 @@
-
+import {addMessage as storeAdd,getMessage as storeGet} from './store.js'
 
 function addMessage(user,message) {
     console.log(`${user} : ${message}`)
@@ -14,8 +14,14 @@ function addMessage(user,message) {
             date: new Date(),
         }
         console.log(fullMessage)
+        storeAdd(fullMessage)
         resolve(fullMessage)
     })
 } 
 
-export {addMessage}
+function getMessage() {
+    return new Promise((resolve,reject)=>{
+        resolve(storeGet())
+    })
+}
+export {addMessage,getMessage}

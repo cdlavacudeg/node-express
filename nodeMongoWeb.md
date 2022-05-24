@@ -81,3 +81,9 @@ Rutas se manejan desde archivo en carpeta network para mantener más limpia app.
 ## Controladores: Definiendo la lógica del negocio
 
 Los controladores van a ser la base del procesamiento de los datos y la comunicación de la api, especificamos como vamos a añadir los datos, actualizarlos o borrarlos
+
+
+## Almacenando la información en una base de datos
+
+Se crea un archivo de practica para verificar que todo quede funcionando adecuadamente.
+
