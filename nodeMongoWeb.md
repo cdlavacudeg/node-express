@@ -58,4 +58,12 @@ HTTP es el protocolo de comunicación que permite las transferencias de informac
   - *Content-length*
     
 - **Query**: Información extra para el servidor que se encuentra en la URL de la pagina `?utm_source=medium`, `color=red & source=yahoo`
- 
+
+## Servir archivos estáticos
+Mediante el uso de express -> `app.use('/app', express.static('public))` es posible servir los archivos estaticos de publicen la ruta que se especifica y usando las rutas de archivo de la carpeta public.
+
+## Errores: Cómo presentarlos e implicaciones en la seguridad
+
+Es muy importante tener en cuenta la información que se le va a brindar al usuario ya que el contenido del error puede dar pie a que se explote una vulnerabilidad del sistema.
+
+
