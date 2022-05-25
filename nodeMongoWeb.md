@@ -1,7 +1,7 @@
 # Node.js: Base de datos con MongoDB y Websockets
 
 # Conexiones hacia los servidores
-
+[Repo](https://github.com/CodingCarlos/backend-node-platzi)
 ## ¿Qué son y cómo se usan las peticiones HTTP?
 
 HTTP es el protocolo de comunicación que permite las transferencias de información en la web.
@@ -132,4 +132,45 @@ Empleamos la libreria [mongoose](https://mongoosejs.com/) para realizar verifica
 
 - `npm install mongoose`
 
+---
 
+# Entidades para crear aplicaciones escalables
+
+Para escalar la arquitectura con multiples entidades empleamos las referencias de mongoose y el populate
+
+```javascript
+// message.model.js
+user:{
+        type:Scema.ObjectId,
+        ref:'User'
+    }
+```
+
+```javascript
+// message.store.js 
+const messages= new Model.find(filter)
+    .populate('user')
+    .exec((error,populated)=>{
+            if(error){
+                    reject(error)
+                    return false
+                }
+        })
+
+```
+
+## Recibir ficheros desde NodeJs
+
+```javascript
+const multer= require('multer')
+
+const upload=multer({
+        dest:'uploads/'
+    })
+
+router.post('/',upload.single('file'),cb)
+
+```
+
+# Websockets
+El protocolo Websocket o wss:// crea un túnel de información entre el usuario y el servidor el cual se quedará abierto hasta que el servidor y/o el cliente cierre la conexión para pedir información en tiempo real.
