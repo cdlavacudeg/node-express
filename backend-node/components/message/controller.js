@@ -1,4 +1,4 @@
-import {addMessage as storeAdd,getMessage as storeGet, updateMessage as storeUpdate} from './store.js'
+import {addMessage as storeAdd,getMessage as storeGet, updateMessage as storeUpdate, deleteMessage as storeRemove} from './store.js'
 
 function addMessage(user,message) {
     console.log(`${user} : ${message}`)
@@ -19,9 +19,9 @@ function addMessage(user,message) {
     })
 } 
 
-function getMessage() {
+function getMessage(filterUser) {
     return new Promise((resolve,reject)=>{
-        resolve(storeGet())
+        resolve(storeGet(filterUser))
     })
 }
 
@@ -36,4 +36,21 @@ function updateMessage(id,message){
         resolve(result)
     })
 }
-export {addMessage,getMessage}
+
+function deleteMessage(id) {
+    return new Promise((resolve,reject)=>{
+        if(!id){
+            reject('Id invalido')
+            return false
+        }
+        storeRemove(id)
+            .then(()=>{
+                resolve()
+            })
+            .catch(e=>{
+                reject(e);
+            })
+    })
+    
+}
+export {addMessage,getMessage,deleteMessage}

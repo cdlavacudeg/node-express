@@ -1,8 +1,11 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import router from './network/routes.js'
+import db from './db.js'
 
+db('ulr de conexión')
 var app=express()
+
 
 app.use(bodyParser.json())
 

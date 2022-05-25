@@ -1,10 +1,11 @@
 import express from 'express'
 import {success,error} from '../../network/response.js'
-import {addMessage,getMessage,updateMessage} from './controller.js'
+import {addMessage,getMessage,updateMessage,deleteMessage} from './controller.js'
 const router=express.Router();
 
 router.get('/',function (req,res) {
-    getMessage()
+    const filterMessages=req.query.user || null;
+    getMessage(filterMessages)
         .then((message)=>{
             success(req,res,message)
         })
@@ -13,10 +14,15 @@ router.get('/',function (req,res) {
         })
 })
 
-router.delete('/',function (req,res) {
-    console.log(req.body)
-    console.log(req.query)
-    success(req,res,'Mensajes eliminandos adecuadamente')
+router.delete('/:id',function (req,res) {
+    deleteMessage(req.params.id)
+        .then(()=>{
+            success(req,res,`Usuario ${req.params.id} eliminado`)
+        })catch(
+            e=>{
+                error(req,res,'Error intentando borrar mensaje')
+            }
+        )
 })
 
 router.post('/',(req,res)=>{

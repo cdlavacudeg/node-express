@@ -1,26 +1,17 @@
-const db = require('mongoose')
 const Model=require('./model')
-// mongodb://<dbuser>: <dbpassword>@ds255107....
-
-
-db.Promise = global.Promise
-
-db.connect('mongodb://...',{
-    useNewUrlParser: true,
-})
-
-console.log('[db] Conectada con éxito')
-
-
 
 function addMessage(message){
     const myMessage =new Model(message);
     myMessage.save();
 }
 
-async function getMessage() {
-   const messages= await Model.find();
-   return messages;
+async function getMessage(filterUser) {
+    let filter={}
+    if(filterUser !==null){
+        filter={user:filterUser}
+    }
+    const messages= await Model.find(filter);
+    return messages;
 }
 
 async function updateMessage(id,message){
@@ -33,4 +24,9 @@ async function updateMessage(id,message){
     return newMessage;
 }
 
-export {addMessage,getMessage,updateMessage}
+function deleteMessage(id){
+    return Model.deleteOne({
+        _id:id
+    })
+}
+export {addMessage,getMessage,updateMessage,deleteMessage}
