@@ -8,8 +8,10 @@ app.use(middleware2)// order matters
 
 function middleware1(req,res,next) {
     console.log('I am a middleware')
+    req.customProperty = 100
 
-    const errObj=new Error('I am an error')
+    let errObj=new Error('I am an error')
+    errObj=false
     next(errObj)
 }
 
@@ -25,6 +27,8 @@ function middleware3(req,res,next) {
 
 function middleware4(req,res,next) {
     console.log('I am a fourth middleware')
+    console.log(`The custom property value is: ${req.customProperty}`)
+    req.customProperty=40
     next()
 }
 
@@ -38,6 +42,7 @@ function errorHandler(err,req,res,next){
 
 app.get('/',middleware4,(req,res,next)=>{
     console.log('I am the standard Express function')
+    console.log(`The custom property value is: ${req.customProperty}`)
     res.send('<h1>Hello World</h1>')
 })
 
