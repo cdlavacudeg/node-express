@@ -27,13 +27,20 @@ app.use(express.urlencoded({extended: true}));
 
 
 /**
- * -------------- SESSION SETUP ----------------
- */
+ * -------------- SESSION SETUP ----------------*/
+const sessionStore=new MongoStore({mongooseConnection:connection,collection:'sessions'});
 
-// TODO
+app.use(sesion({
+    secret:process.env.SCRET,
+    resave:false,
+    saveUninitialized:true,
+    store: sessionStore,
+    cookie:{
+        maxAge: 1000*60*60*24
+    }
+}))
 
-/**
- * -------------- PASSPORT AUTHENTICATION ----------------
+/* -------------- PASSPORT AUTHENTICATION ----------------
  */
 
 app.use(passport.initialize());
