@@ -22,7 +22,7 @@ Database in the cloud.
 ## Connect database
 
 ```
-mongosh "mongodb+srv://nocountry31.4zumk.mongodb.net/NoCountry31" --username cdlavacudeg
+mongosh "mongodb+srv://<CLUSTER>.mongodb.net/NoCountry31" --username <USERNAME>
 ```
 
 ## How does MongoDB store data?
@@ -62,3 +62,15 @@ mongorestore --uri "mongodb+srv://<your username>:<your password>@<your cluster>
 
 mongoimport --uri="mongodb+srv://<your username>:<your password>@<your cluster>.mongodb.net/sample_supplies" --drop sales.json
 ```
+
+## Data Explorer
+
+### Commands
+
+- `show dbs`: Show the databases in the connection.
+- `use {database_name}`: Use the database.
+- `show collections`: Show the collections in a database.
+- `db.{collection_name}.find({"field":"value"})`: query the collection.
+- `db.{collection_name}.find({"field":"value"}).count()`: query the collection and count the total documents.
+- `it`: Iterates through a cursor(a pointer (direct address of the memory location) to a result set of a query).
+- `db.{collection_name}.find({"field":"value"}).pretty()`: query the collection and format it.
