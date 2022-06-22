@@ -107,3 +107,65 @@ Collections and databases are created when ther are being used.
 - `deleteOne()` : delete only one document, the first it finds.
 - `deleteMany()`: delete all of the documents that it finds.
 - `db.{collection}.drop()` : delete collection
+
+## Advance CRUD operators:
+
+### Query operators - Comparison
+
+- **query operators**: Provide additional ways to locate data within the database `{<field>:{<operator>:<value>}}`
+  - `{"$eq"}`: Equal to
+  - `{"$ne"}`: Not equal to
+  - `{"$gt"}`: Greater than >
+  - `{"$lt"}`: Less than <
+  - `{"$gte"}`: Greater Than or Equal to >=
+  - `{"$lte"}`: Less Than or Equal to <=
+- `db.trips.find({ "tripduration": { "$lte" : 70 }, "usertype": { "$ne": "Subscriber" } }).pretty()`
+
+### Query operators - Logic
+
+- `{<operator>:[{statement1},{statement2},...]}`
+  - `{"$and"}`: Match all of the specified query clauses
+  - `{"$or"}` : At least one of the query clouses is matched
+  - `{"$nor}` : Fail to match both given clauses
+  - `{"$not}` : Negates the query requirement
+- **Implicit $and**:
+
+  - `{"$and":[{"student_id":{"$gt":25}},{"student_id":{"$lt":100}}]}`
+  - `{"student_id":{"$gt":25,"$lt":100}}`
+  - ```
+    db.routes.find({ "$and": [ { "$or" :[ { "dst_airport": "KZN" },
+                                        { "src_airport": "KZN" }
+                                      ] },
+                              { "$or" :[ { "airplane": "CR2" },
+                                         { "airplane": "A81" } ] }
+                             ]}).pretty()
+    ```
+  - ```
+    db.inspections.find({"$and":[
+        {"result":{"$eq":"Out of Business"}},
+        {"sector":{"$eq":"Home Improvoment Contractor - 100"}}
+        ])
+    ```
+
+  - ```
+    db.companies.find({"$or":[{
+            "$and":[{
+                  "founded_year":2004
+              },{
+                  "$or":[{"category_code":"social"},{"category_code":"web"}]
+                }]
+          },{
+            "$and":[{
+                  "founded_month":10
+            },{
+                  "$or":[{"category_code":"social"},{"category_code":"web"}]
+              }]
+            }
+          ]})
+    ```
+
+  ````
+
+  - ```
+  db.companies.find({"$or":[{"$and":[{"founded_year":2004},{"$or":[{"category_code":"social"},{"category_code":"web"}]}]},{"$and":[{"founded_month":10},{"$or":[{"category_code":"social"},{"category_code":"web"}]}]}]})
+  ````
