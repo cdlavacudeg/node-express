@@ -132,22 +132,25 @@ Collections and databases are created when ther are being used.
 
   - `{"$and":[{"student_id":{"$gt":25}},{"student_id":{"$lt":100}}]}`
   - `{"student_id":{"$gt":25,"$lt":100}}`
-  - ```
-    db.routes.find({ "$and": [ { "$or" :[ { "dst_airport": "KZN" },
-                                        { "src_airport": "KZN" }
-                                      ] },
-                              { "$or" :[ { "airplane": "CR2" },
-                                         { "airplane": "A81" } ] }
-                             ]}).pretty()
-    ```
-  - ```
+
+```
+   db.routes.find({ "$and": [ { "$or" :[ { "dst_airport": "KZN" },
+                                       { "src_airport": "KZN" }
+                                     ] },
+                             { "$or" :[ { "airplane": "CR2" },
+                                        { "airplane": "A81" } ] }
+                            ]}).pretty()
+```
+
+```
+
     db.inspections.find({"$and":[
         {"result":{"$eq":"Out of Business"}},
         {"sector":{"$eq":"Home Improvoment Contractor - 100"}}
         ])
-    ```
+```
 
-  - ```
+```
     db.companies.find({"$or":[{
             "$and":[{
                   "founded_year":2004
@@ -162,10 +165,131 @@ Collections and databases are created when ther are being used.
               }]
             }
           ]})
-    ```
+```
 
-  ````
+### Expressive Query operators
 
-  - ```
-  db.companies.find({"$or":[{"$and":[{"founded_year":2004},{"$or":[{"category_code":"social"},{"category_code":"web"}]}]},{"$and":[{"founded_month":10},{"$or":[{"category_code":"social"},{"category_code":"web"}]}]}]})
-  ````
+- `{"$exp"}` : allows the use of aggregation expressions withon the query language.`{$expe: {<expression>}}`
+- **aggregation expressions**:
+  - `$` denotes the use of an operator and addresses the field value to.
+  - `{<operator>: {<field>,<value>}}` : Aggregation sintax
+
+```
+db.trips.find({ "$expr": { "$eq": [ "$end station id", "$start station id"] }
+}).count()
+
+```
+
+```
+
+db.trips.find({ "$expr": { "$and": [ { "$gt": [ "$tripduration", 1200 ]},
+{ "$eq": [ "$end station id", "$start station id" ]}
+]}}).count()
+
+```
+
+### Array Operators
+
+- `{"$push"}`: add an element to an array; Turns a field into an array field if it was previusly a different type.
+- `{"$all"}` : return all documents that have al least the elements in the query without order.
+- `{"$size}` : query by the size of the array.
+- `{"$elemMatch}`: Enter deep in the object
+
+```
+db.listingsAndReviews.find({ "amenities": {
+"$size": 20,
+                                  "$all": [ "Internet", "Wifi", "Kitchen",
+"Heating", "Family/kid friendly",
+"Washer", "Dryer", "Essentials",
+"Shampoo", "Hangers",
+"Hair dryer", "Iron",
+"Laptop friendly workspace" ]
+}
+}).pretty()
+
+```
+
+```
+db.listingsAndReviews.find({ "reviews": { "$size":50 },
+                             "accommodates": { "$gt":6 }})
+```
+
+```
+db.listingsAndReviews.find({"property_type":"House","amenities":{"$all":["Changing table"]}})
+```
+
+#### Projection
+:
+- Syntax: `db.{collection}.find({<query>},{<projection>})`: 1 Include the field, 0 exclude the field.
+
+```
+db.listingsAndReviews.find({ "amenities":
+{ "$size": 20, "$all": [ "Internet", "Wifi", "Kitchen", "Heating",
+"Family/kid friendly", "Washer", "Dryer",
+"Essentials", "Shampoo", "Hangers",
+"Hair dryer", "Iron",
+"Laptop friendly workspace" ] } },
+{"price": 1, "address": 1}).pretty()
+```
+
+```
+db.listingsAndReviews.find({ "amenities": "Wifi" },
+{ "price": 1, "address": 1, "\_id": 0 }).pretty()
+```
+
+```
+db.grades.find({ "class_id": 431 },
+{ "scores": { "$elemMatch": { "score": { "$gt": 85 } } }
+}).pretty()
+
+```
+
+```
+db.grades.find({ "scores": { "$elemMatch": { "type": "extra credit" } }
+}).pretty()
+
+```
+
+```
+db.companies.find({"offices":{"$elemMatch":{"city":"Seattle"}}}).count()
+
+db.companies.find({ "funding_rounds": { "$size": 8 } },
+                  { "name": 1, "_id": 0 })
+```
+
+## Array Operators and Sub-Documents
+
+```
+use sample_training
+
+db.trips.findOne({ "start station location.type": "Point" })
+
+db.companies.find({ "relationships.0.person.last_name": "Zuckerberg" },
+                  { "name": 1 }).pretty()
+
+db.companies.find({ "relationships.0.person.first_name": "Mark",
+                    "relationships.0.title": { "$regex": "CEO" } },
+                  { "name": 1 }).count()
+
+
+db.companies.find({ "relationships.0.person.first_name": "Mark",
+                    "relationships.0.title": {"$regex": "CEO" } },
+                  { "name": 1 }).pretty()
+
+db.companies.find({ "relationships":
+                      { "$elemMatch": { "is_past": true,
+                                        "person.first_name": "Mark" } } },
+                  { "name": 1 }).pretty()
+
+db.companies.find({ "relationships":
+                      { "$elemMatch": { "is_past": true,
+                                        "person.first_name": "Mark" } } },
+                  { "name": 1 }).count()
+```
+
+```
+db.trips.find({"start station location.coordinates.0":{"$lt":-74}}).count()
+```
+
+- [Query an Array](https://www.mongodb.com/docs/manual/tutorial/query-arrays/)
+- [Regex](https://www.mongodb.com/docs/manual/reference/operator/query/regex/) 
