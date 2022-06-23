@@ -219,7 +219,7 @@ db.listingsAndReviews.find({"property_type":"House","amenities":{"$all":["Changi
 ```
 
 #### Projection
-:
+
 - Syntax: `db.{collection}.find({<query>},{<projection>})`: 1 Include the field, 0 exclude the field.
 
 ```
@@ -292,4 +292,124 @@ db.trips.find({"start station location.coordinates.0":{"$lt":-74}}).count()
 ```
 
 - [Query an Array](https://www.mongodb.com/docs/manual/tutorial/query-arrays/)
-- [Regex](https://www.mongodb.com/docs/manual/reference/operator/query/regex/) 
+- [Regex](https://www.mongodb.com/docs/manual/reference/operator/query/regex/)
+
+---
+
+## Aggregation Framework
+
+In its simplest form, another way to query data in MongoDB
+
+```
+  {"$group":{
+    _id: <expression>, //GroupBy expression
+    <field1>:{<acumulator1>:<expression1>},}
+  }
+```
+
+### Syntax
+
+- MQL
+
+  ```
+  db.listingsAndReviews.find({ "amenities": "Wifi" },
+                           { "price": 1, "address": 1, "_id": 0 }).pretty()
+  ```
+
+  ```
+  db.listingsAndReviews.findOne({ },{ "address": 1, "_id": 0 })
+  ```
+
+- Aggregation
+
+  ```
+  db.listingsAndReviews.aggregate([
+                                  { "$match": { "amenities": "Wifi" } },
+                                  { "$project": { "price": 1,
+                                                  "address": 1,
+                                                  "_id": 0 }}]).pretty()
+  ```
+
+  ```
+  db.listingsAndReviews.aggregate([ { "$project": { "address": 1, "_id": 0 }},
+                                  { "$group": { "_id": "$address.country" }}])
+  ```
+
+  ```
+  db.listingsAndReviews.aggregate([
+                                  { "$project": { "address": 1, "_id": 0 }},
+                                  { "$group": { "_id": "$address.country",
+                                                "count": { "$sum": 1 } } }
+                                ])
+  ```
+
+  ```
+   db.listingsAndReviews.aggregate([{"$project":{"room_type":1,"_id":0}},{"$group":{{"_id":"$room_type"}}}])
+  ```
+
+- [Mongo Aggregation Course](https://university.mongodb.com/courses/M121/about)
+
+## Sort() and Limit()
+
+```
+use sample_training
+
+db.zips.find().sort({ "pop": 1 }).limit(1)
+
+db.zips.find({ "pop": 0 }).count()
+
+db.zips.find().sort({ "pop": -1 }).limit(1)
+
+db.zips.find().sort({ "pop": -1 }).limit(10)
+
+db.zips.find().sort({ "pop": 1, "city": -1 })
+```
+
+- [Cursor Methods](https://www.mongodb.com/docs/manual/reference/method/js-cursor/)
+
+## Indexes
+
+Make queries even more efficient, Are one of the most impactful ways to improve query performance.
+
+- `db.{collection}.createIndex({{"<field>":1},....})`
+
+```
+use sample_training
+
+db.trips.find({ "birth year": 1989 })
+
+db.trips.find({ "start station id": 476 }).sort( { "birth year": 1 } )
+
+db.trips.createIndex({ "birth year": 1 })
+
+db.trips.createIndex({ "start station id": 1, "birth year": 1 })
+```
+
+- [MongoDB Performance](https://university.mongodb.com/courses/M201/about)
+
+## Data Modeling
+
+Data is stored in the way that it is used.
+Data that is used togethor should be stared together.
+Evolving Application implies an evolving data model.
+
+- [Data Modeling DOCS](https://www.mongodb.com/docs/manual/core/data-modeling-introduction/)
+- [Data Modeling Course](https://university.mongodb.com/courses/M320/about)
+
+## Upsert
+
+Everything in MQL that is used to **locate** a document in a collection con also be used to modify this document.
+
+Upsert is a hybrid of update and insert, it should only be used with it is needed.
+
+- **Is there a match?**:
+  - **NO** -> **Insert** a new document.
+  - **YES** -> **Update** the matched document.
+
+```
+db.iot.updateOne({ "sensor": r.sensor, "date": r.date,
+                   "valcount": { "$lt": 48 } },
+                         { "$push": { "readings": { "v": r.value, "t": r.time } },
+                        "$inc": { "valcount": 1, "total": r.value } },
+                 { "upsert": true })
+```
