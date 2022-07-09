@@ -54,3 +54,7 @@ CREATE TABLE task (
 
 - `npm i pg`
 - `npm i dotenv`
+
+## ORM (Object Relational Model)
+
+- [Sequelize](https://sequelize.org/docs/v6/getting-started/)
