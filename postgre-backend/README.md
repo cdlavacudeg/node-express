@@ -7,7 +7,9 @@
 ## Configuration of docker for postgreSQL
 
 - [Docker Hub PostgreSQL](https://hub.docker.com/_/postgres)
-
+- [Clean restart of a Docker
+  Instance](https://docs.tibco.com/pub/mash-local/4.3.0/doc/html/docker/GUID-BD850566-5B79-4915-987E-430FC38DAAE4.html)
+- [Docker mount](https://faun.pub/postgresql-in-docker-mount-volume-3220fbd0afc4) 
 - create `docker-compose.yml`
 - volumes -> persist data
 - run in terminal `docker-compose up -d {name_service:postgres}`:
