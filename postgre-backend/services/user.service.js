@@ -1,4 +1,4 @@
-const getConnection = require('../libs/postgres')
+const pool = require('../libs/postgres');
 
 class UserService {
   constructor() {}
@@ -8,8 +8,8 @@ class UserService {
   }
 
   async find() {
-    const client = await getConnection();
-    const table = await client.query('SELECT * FROM task')
+    const query = 'SELECT * FROM task';
+    const table = await pool.query(query);
     return table.rows;
   }
 

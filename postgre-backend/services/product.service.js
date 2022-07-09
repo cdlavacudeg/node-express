@@ -7,7 +7,7 @@ class ProductsService {
     this.products = [];
     this.generate();
     this.pool = pool;
-    this.pool.on('error',(err)=>console.error(err))
+    this.pool.on('error', (err) => console.error(err));
   }
 
   generate() {
@@ -33,8 +33,8 @@ class ProductsService {
   }
 
   async find() {
-    const query='SELECT * FROM task';
-    const table=await this.pool.query(query)
+    const query = 'SELECT * FROM task';
+    const table = await this.pool.query(query);
     return table.rows;
   }
 

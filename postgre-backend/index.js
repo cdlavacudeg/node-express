@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const routerApi = require('./routes');
-
+const { config } = require('./config/config');
 const {
   logErrors,
   errorHandler,
@@ -9,7 +9,7 @@ const {
 } = require('./middlewares/error.handler');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = config.port;
 
 require('dotenv').config();
 app.use(express.json());
