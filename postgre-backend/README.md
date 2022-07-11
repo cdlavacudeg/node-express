@@ -79,3 +79,7 @@ module.exports = {
   'seeders-path': './db/seeders',
 }
 ```
+
+### Relations in databases
+
+- [Associations Sequelize](https://sequelize.org/docs/v6/core-concepts/assocs/)
