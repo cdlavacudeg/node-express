@@ -58,3 +58,24 @@ CREATE TABLE task (
 ## ORM (Object Relational Model)
 
 - [Sequelize](https://sequelize.org/docs/v6/getting-started/)
+
+### Migrations in Sequelize
+
+Just like you use version control systems such as Git to manage changes in your source code, you can use migrations to
+keep **track of changes to the database**.
+
+-`sequelize.sync()` Read the models, create the tabels and relist(overwrite data), It's not recommended for production.
+It's better to use a migration system.
+
+- For migrations we use `sequelize-cli` as a dev dependency.`npm i sequelize-cli -D.`
+
+Later we create a configuration file `.sequelizerc`:
+
+```
+module.exports = {
+  'config': './db/config.js',
+  'models-paths: './db/models',
+  'migrations-paths: './db/migrations',
+  'seeders-path': './db/seeders',
+}
+```

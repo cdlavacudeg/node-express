@@ -14,6 +14,6 @@ const sequilize = new Sequelize(URI, {
 
 setupModels(sequilize);
 
-sequilize.sync(); // Create the structure
+sequilize.sync(); // Create the structure, read the models, it does relist(overwrite information), not good in production.
 
 module.exports = sequilize;
