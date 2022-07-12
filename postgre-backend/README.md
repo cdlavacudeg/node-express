@@ -83,3 +83,9 @@ module.exports = {
 ### Relations in databases
 
 - [Associations Sequelize](https://sequelize.org/docs/v6/core-concepts/assocs/)
+
+# Json Web Token
+
+- [JWT](https://jwt.io/)
+- [Configure Silent Authentication](https://auth0.com/docs/login/configure-silent-authentication)
+- [What Are Refresh Tokens and How to use them securely](https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/)
