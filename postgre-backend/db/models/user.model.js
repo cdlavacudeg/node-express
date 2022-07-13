@@ -29,6 +29,11 @@ const UserSchema = {
     field: 'create_at', // Name of the column on the database
     defaultValue: Sequelize.NOW,
   },
+  recoveryToken: {
+    field: 'recovery_token',
+    allowNull: true,
+    type: Sequelize.DataTypes.STRING,
+  },
 };
 
 class User extends Model {
