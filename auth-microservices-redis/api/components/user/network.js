@@ -1,9 +1,11 @@
 const express = require("express");
 const response = require("../../../network/response");
 const router = express.Router();
+const controller = require("./controller");
 
 router.get("/", (req, res) => {
-  response.succes(req, res, "Todo correcto", 200);
+  const list = controller.list();
+  response.succes(req, res, list, 200);
 });
 
 module.exports = router;
