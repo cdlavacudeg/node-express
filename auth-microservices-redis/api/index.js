@@ -5,6 +5,9 @@ const config = require("../config.js");
 
 const user = require("./components/user/network");
 
+//app.use(urlencoded({ extended: true }));
+app.use(express.json());
+
 //Router
 app.use("/api/user", user);
 
