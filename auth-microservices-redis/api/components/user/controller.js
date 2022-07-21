@@ -1,4 +1,5 @@
 const uniqid = require("uniqid");
+const auth = require("../auth");
 const TABLE = "user";
 
 module.exports = function (injecteStore) {
@@ -12,8 +13,10 @@ module.exports = function (injecteStore) {
   function get(id) {
     return store.get(TABLE, id);
   }
-  function upsert(body) {
+
+  async function upsert(body) {
     const user = {
+      username: body.username,
       name: body.name,
     };
 
@@ -21,6 +24,14 @@ module.exports = function (injecteStore) {
       user.id = body.id;
     } else {
       user.id = uniqid();
+    }
+
+    if (body.password || body.username) {
+      await auth.upsert({
+        id: user.id,
+        username: user.username,
+        password: body.password,
+      });
     }
     return store.upsert(TABLE, user);
   }
