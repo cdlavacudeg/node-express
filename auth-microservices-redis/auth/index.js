@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config.js");
+const error = require("../utils/error");
+
 const secret = config.jwt.secret;
 
 function sign(data) {
@@ -12,7 +14,7 @@ const check = {
     console.log(decoded);
 
     if (decoded.id !== owner) {
-      throw new Error("No puedes editar este usuario");
+      throw error("No puedes editar este usuario", 401);
     }
   },
 };
@@ -23,7 +25,7 @@ function verify(token) {
 
 function getToken(auth) {
   if (!auth) {
-    throw new Error("No viene token");
+    throw error("No viene token", 401);
   }
 
   if (auth.indexOf("Bearer ") === -1) {

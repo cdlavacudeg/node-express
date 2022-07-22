@@ -3,14 +3,12 @@ const response = require("../../../network/response");
 const router = express.Router();
 const Controller = require("./index");
 
-router.post("/login", function (req, res) {
+router.post("/login", function (req, res, next) {
   Controller.login(req.body.username, req.body.password)
     .then((token) => {
       response.succes(req, res, token, 200);
     })
-    .catch((error) => {
-      response.error(req, res, error.message, 400);
-    });
+    .catch(next);
 });
 
 module.exports = router;
