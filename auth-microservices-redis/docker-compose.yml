@@ -1,0 +1,27 @@
+version: "3.1"
+
+services:
+  mysql:
+    image: mysql
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_DATABASE: "node"
+      MYSQL_USER: "cristian"
+      MYSQL_PASSWORD: "123456"
+    ports:
+      - "3306:3306"
+    volumes:
+      - $HOME/docker/volumes/mysql:/var/lib/mysql
+
+  phpadmin:
+    image: phpmyadmin
+    restart: on-failure
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    ports:
+      - 8080:80
