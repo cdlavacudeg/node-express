@@ -26,7 +26,6 @@ module.exports = function (injecteStore) {
 
   async function login(username, password) {
     const data = await store.query(TABLE, { username: username });
-
     return bcrypt.compare(password, data.password).then((IsEqual) => {
       if (IsEqual) {
         //Generate token

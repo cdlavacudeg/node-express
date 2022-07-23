@@ -11,11 +11,13 @@ function sign(data) {
 const check = {
   own: function (req, owner) {
     const decoded = decodeHeader(req);
-    console.log(decoded);
 
     if (decoded.id !== owner) {
       throw error("No puedes editar este usuario", 401);
     }
+  },
+  logged: function (req, owner) {
+    const decoded = decodeHeader(req);
   },
 };
 
